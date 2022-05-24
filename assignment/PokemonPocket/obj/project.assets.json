@@ -5578,19 +5578,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Admin\\.nuget\\packages\\": {}
+    "C:\\Users\\saber\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Advanced Prog\\PokeGame\\c-pokemonbattle\\assignment\\PokemonPocket\\PokemonPocket.csproj",
+      "projectUniqueName": "D:\\sch stuff\\y2\\AVP\\Assignment New\\c-pokemonbattle-1\\assignment\\PokemonPocket\\PokemonPocket.csproj",
       "projectName": "PokemonPocket",
-      "projectPath": "D:\\Advanced Prog\\PokeGame\\c-pokemonbattle\\assignment\\PokemonPocket\\PokemonPocket.csproj",
-      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-      "outputPath": "D:\\Advanced Prog\\PokeGame\\c-pokemonbattle\\assignment\\PokemonPocket\\obj\\",
+      "projectPath": "D:\\sch stuff\\y2\\AVP\\Assignment New\\c-pokemonbattle-1\\assignment\\PokemonPocket\\PokemonPocket.csproj",
+      "packagesPath": "C:\\Users\\saber\\.nuget\\packages\\",
+      "outputPath": "D:\\sch stuff\\y2\\AVP\\Assignment New\\c-pokemonbattle-1\\assignment\\PokemonPocket\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\saber\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "NET6.0"
@@ -5648,7 +5648,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   }
