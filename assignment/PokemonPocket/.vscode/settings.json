@@ -1,0 +1,8 @@
+{
+    "git.ignoreLimitWarning": true,
+    "sqltools.connections": [],
+    "sqltools.useNodeRuntime": true,
+    "dataworkspace.excludedProjects": [
+        "PokeDB/PokeDB.sqlproj"
+    ]
+}
