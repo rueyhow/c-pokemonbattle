@@ -17,8 +17,8 @@ namespace PokemonPocket.Migrations
                     PokeItemName = table.Column<string>(type: "TEXT", nullable: true),
                     description = table.Column<string>(type: "TEXT", nullable: true),
                     PokeItemCount = table.Column<int>(type: "INTEGER", nullable: false),
-                    Discriminator = table.Column<string>(type: "TEXT", nullable: false),
-                    buff = table.Column<double>(type: "REAL", nullable: true)
+                    buff = table.Column<int>(type: "INTEGER", nullable: false),
+                    Discriminator = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {

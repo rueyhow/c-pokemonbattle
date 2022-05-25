@@ -10,7 +10,7 @@ using PokemonPocket;
 namespace PokemonPocket.Migrations
 {
     [DbContext(typeof(ContextPoke))]
-    [Migration("20220525091517_InitialCreate")]
+    [Migration("20220525185714_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,6 +33,9 @@ namespace PokemonPocket.Migrations
 
                     b.Property<string>("PokeItemName")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("buff")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("description")
                         .HasColumnType("TEXT");
@@ -88,9 +91,6 @@ namespace PokemonPocket.Migrations
             modelBuilder.Entity("PokemonPocket.AttackBooster", b =>
                 {
                     b.HasBaseType("PokemonPocket.PokeItems");
-
-                    b.Property<double>("buff")
-                        .HasColumnType("REAL");
 
                     b.HasDiscriminator().HasValue("AttackBooster");
                 });

@@ -12,7 +12,7 @@ namespace PokemonPocket
             {
                 var PokeDb = db.pokemons.ToList();
                 // list of valid input options
-                List<string> options = new List<string>() { "1", "2", "3", "4", "5", "6" ,"7","8", "Q" };
+                List<string> options = new List<string>() { "1", "2", "3", "4", "5", "6" ,"7","8","9","Q" };
 
                 // List<Pokemon> pokemons = new List<Pokemon>() { };
                 // Random rnd = new Random();
@@ -65,6 +65,9 @@ namespace PokemonPocket
                     }
                     if (response == "8"){
                         functions.PokemonShop();
+                    }
+                    if (response == "9"){
+                        functions.PokemonBattleRules();
                     }
                     // exit application
                     if (response == "Q")

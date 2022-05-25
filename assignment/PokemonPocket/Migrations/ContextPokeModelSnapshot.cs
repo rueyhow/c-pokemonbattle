@@ -32,6 +32,9 @@ namespace PokemonPocket.Migrations
                     b.Property<string>("PokeItemName")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("buff")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("description")
                         .HasColumnType("TEXT");
 
@@ -86,9 +89,6 @@ namespace PokemonPocket.Migrations
             modelBuilder.Entity("PokemonPocket.AttackBooster", b =>
                 {
                     b.HasBaseType("PokemonPocket.PokeItems");
-
-                    b.Property<double>("buff")
-                        .HasColumnType("REAL");
 
                     b.HasDiscriminator().HasValue("AttackBooster");
                 });

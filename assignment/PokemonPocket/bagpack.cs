@@ -14,6 +14,8 @@ namespace PokemonPocket
 
         public int PokeItemCount{get;set;}
 
+        public int buff {get;set;}
+
     }
 
     public class HealPotion : PokeItems{
@@ -26,11 +28,10 @@ namespace PokemonPocket
     }
 
     public class AttackBooster : PokeItems {
-        public double buff {get;set;}
         public AttackBooster(){}
         public AttackBooster(int PokeItemCount){
             this.PokeItemName = "AttackBooster";
-            this.buff = 1.2;
+            this.buff = 2;
             this.PokeItemCount = PokeItemCount;
 
         }
