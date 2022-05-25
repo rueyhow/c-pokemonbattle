@@ -26,7 +26,17 @@ namespace PokemonPocket
         {
             Console.WriteLine("Welcome to the Pokemon Shop!");
             Console.WriteLine("Here are some items that are available for purchase");
-            Console.WriteLine("1) Heal Potion - Heal your pokemon back to full health at any point in the fight");
+            Console.WriteLine("1) Heal Potion - Heal your pokemon back to full health at any point in the fight - 100 Coins");
+            Console.WriteLine("2) Attack Booster - Give your pokemon a 20% attack boost in battle - 100 Coins");
+        }
+
+        public static void DisplayPokeItems(){
+            using (var db = new ContextPoke()){
+                var bagpack = db.PokeItemz.ToList();
+                foreach(PokeItems g in bagpack){
+                    Console.WriteLine($"{g.PokeItemName} :  {g.PokeItemCount}");
+                }
+            }
         }
         public static void AddPokemon()
         {
@@ -444,54 +454,80 @@ namespace PokemonPocket
                 if (bagpack.Count <= 0)
                 {
                     db.Add(new Coins(0));
+                    db.Add(new HealPotion(0));
+                    db.Add(new AttackBooster(0));
                     db.SaveChanges();
                 }
             }
         }
-        public static void DisplayPokeItems()
-        {
-            using (var db = new ContextPoke())
-            {
-                var bagpack = db.PokeItemz.ToList();
-                foreach (PokeItems i in bagpack)
-                {
-                    Console.WriteLine($"You have {i.PokeItemCount} amount of coins!");
-                }
-            }
-        }
-
         public static void PokemonShop()
         {
             using (var db = new ContextPoke())
             {
                 var PokeDb = db.pokemons.ToList();
-            }
-            functions.PokeShopMenu();
-            List<int> purchaseChoices = new List<int>(){
+                var bagpack = db.PokeItemz.ToList();
+                functions.PokeShopMenu();
+                List<int> purchaseChoices = new List<int>(){
             1,
             2
         };
-            try
-            {
-                Console.Write("Please select your choice of purchase");
-                int purchase = Int32.Parse(Console.ReadLine());
-                if (purchaseChoices.Contains(purchase))
+                try
                 {
-                    if (purchase == 1)
+                    DisplayPokeItems();
+                    Console.Write("Please select your choice of purchase");
+                    int purchase = Int32.Parse(Console.ReadLine());
+                    if (purchaseChoices.Contains(purchase))
                     {
-                        Console.Write("You have selected the heal potion!");
+                        if (purchase == 1)
+                        {
+                            Console.Write("You have selected the heal potion!");
+                            Console.WriteLine("Price : 100 Coins");
+                            Console.WriteLine("Are you sure you want to purchase a heal potion?");
+                            char buy = Convert.ToChar(Console.ReadLine().ToUpper());
+                            if (buy == 'Y')
+                            {
+                                foreach (PokeItems i in bagpack)
+                                {
+                                    if (i.PokeItemName == "Coins")
+                                    {
+                                        if (i.PokeItemCount >= 100)
+                                        {
+                                            foreach (PokeItems g in bagpack)
+                                            {
+                                                if (g.PokeItemName == "Heal Potion")
+                                                {
+                                                    g.PokeItemCount += 1;
+                                                    db.SaveChanges();
+                                                }
+                                                
+                                            }
+                                            i.PokeItemCount -= 100;
+                                            db.SaveChanges();
+                                            Console.WriteLine("You have purchased a heal potion!");
+                                        }
+                                        else{
+                                            Console.WriteLine("You do not have enough coins!");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (purchase == 2)
+                        {
+                            Console.WriteLine("You have selected an attack booster");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Please enter a valid choice");
                     }
                 }
-                else
+                catch
                 {
-                    Console.WriteLine("Please enter a valid choice");
+                    Console.WriteLine("Incorrect Format Entered");
                 }
-            }
-            catch
-            {
-                Console.WriteLine("Incorrect Format Entered");
-            }
 
+            }
         }
     }
 }
