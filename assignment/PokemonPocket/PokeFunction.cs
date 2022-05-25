@@ -622,7 +622,9 @@ namespace PokemonPocket
                                             }
                                             i.PokeItemCount -= 300;
                                             db.SaveChanges();
+                                            TextArt.HealPotionIcon();
                                             Console.WriteLine("You have purchased a heal potion!");
+                                           
                                         }
                                         else
                                         {
@@ -661,6 +663,7 @@ namespace PokemonPocket
                                             }
                                             i.PokeItemCount -= 100;
                                             db.SaveChanges();
+                                            TextArt.AttackBoosterIcon();
                                             Console.WriteLine("You have purchased an AttackBooster!");
                                             break;
                                         }
