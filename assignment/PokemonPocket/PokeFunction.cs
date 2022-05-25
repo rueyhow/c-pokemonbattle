@@ -18,7 +18,7 @@ namespace PokemonPocket
             string dash = String.Concat(Enumerable.Repeat("-", 29));
             Console.WriteLine($"{stars}\nWelcome to Pokemon Pocket App\n{stars}");
             Console.WriteLine("(1).  Add Pokemon To Pocket\n(2).  List Pokemon(s) in my pocket\n(3).  Check if i can evolve Pokemon\n(4).  Evolve Pokemon");
-            Console.WriteLine($"(5).  Delete Pokemon from list\n(6).  Pokemon Battle\n(7)Display Number Of Coins");
+            Console.WriteLine($"(5).  Delete Pokemon from list\n(6).  Pokemon Battle\n(7).  Display Your Items in BagPack\n(8).  PokeShop");
             Console.Write("Please only enter [1,2,3,4] or Q to quit : ");
         }
 
@@ -263,6 +263,13 @@ namespace PokemonPocket
                 }
             }
         }
+        public static int FindCoin(){
+            using (var db = new ContextPoke()){
+                var bagpack = db.PokeItemz.ToList();
+                int index = bagpack.FindIndex(a => a.PokeItemName == "Coins");
+                return index;
+            }
+        }
         public static void PokemonBattle()
         {
             using (var db = new ContextPoke())
@@ -396,7 +403,7 @@ namespace PokemonPocket
                                     SelectedForBattle.HP = savedHP;
                                     SelectedForBattle.EXP += 15;
                                     Console.WriteLine("Oh no, you lost! Better Luck Next Time!");
-                                    bagpack[0].PokeItemCount += 10;
+                                    bagpack[FindCoin()].PokeItemCount += 10;
                                     battleStatus = false;
                                     db.SaveChanges();
                                     break;
@@ -409,19 +416,19 @@ namespace PokemonPocket
                                     if (savedLevel == 1)
                                     {
                                         SelectedForBattle.EXP += rnd.Next(30, 100);
-                                        bagpack[0].PokeItemCount += 50;
+                                        bagpack[FindCoin()].PokeItemCount += 50;
                                     }
 
                                     if (savedLevel == 2)
                                     {
                                         SelectedForBattle.EXP += rnd.Next(100, 200);
-                                        bagpack[0].PokeItemCount += 100;
+                                        bagpack[FindCoin()].PokeItemCount += 100;
                                     }
 
                                     if (savedLevel == 3)
                                     {
                                         SelectedForBattle.EXP += rnd.Next(250, 350);
-                                        bagpack[0].PokeItemCount += 500;
+                                        bagpack[FindCoin()].PokeItemCount += 500;
                                     }
 
                                     Console.WriteLine("Congrats! You won!");

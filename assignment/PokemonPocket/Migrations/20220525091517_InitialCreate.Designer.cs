@@ -10,7 +10,7 @@ using PokemonPocket;
 namespace PokemonPocket.Migrations
 {
     [DbContext(typeof(ContextPoke))]
-    [Migration("20220524155709_InitialCreate")]
+    [Migration("20220525091517_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
