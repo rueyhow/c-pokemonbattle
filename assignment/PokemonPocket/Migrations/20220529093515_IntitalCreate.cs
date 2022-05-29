@@ -4,7 +4,7 @@
 
 namespace PokemonPocket.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class IntitalCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -39,6 +39,7 @@ namespace PokemonPocket.Migrations
                     EvolveTo = table.Column<string>(type: "TEXT", nullable: true),
                     EvolveStatus = table.Column<bool>(type: "INTEGER", nullable: false),
                     Skill = table.Column<string>(type: "TEXT", nullable: true),
+                    PokeLevel = table.Column<int>(type: "INTEGER", nullable: false),
                     Discriminator = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>

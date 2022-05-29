@@ -10,8 +10,8 @@ using PokemonPocket;
 namespace PokemonPocket.Migrations
 {
     [DbContext(typeof(ContextPoke))]
-    [Migration("20220525185714_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20220529093515_IntitalCreate")]
+    partial class IntitalCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -70,6 +70,9 @@ namespace PokemonPocket.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("NoToEvolve")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PokeLevel")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Skill")

@@ -70,6 +70,9 @@ namespace PokemonPocket.Migrations
                     b.Property<int>("NoToEvolve")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("PokeLevel")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Skill")
                         .HasColumnType("TEXT");
 
