@@ -12,18 +12,11 @@ namespace PokemonPocket
             {
                 var PokeDb = db.pokemons.ToList();
                 // list of valid input options
-                List<string> options = new List<string>() { "1", "2", "3", "4", "5", "6" ,"7","8","9","10" , "Q" };
-
-                // List<Pokemon> pokemons = new List<Pokemon>() { };
-                // Random rnd = new Random();
-
-                // Printing of the menu contents
-                // string stars = String.Concat(Enumerable.Repeat("*", 29));
-                // string dash = String.Concat(Enumerable.Repeat("-", 29));
-                // default add bc im lazy
-                // pokemons.Add(new Pikachu(34, 16));
-                // pokemons.Add(new Charmander(100,12));
-                // pokemons.Add(new Eevee(71, 8));
+                List<string> options = new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Q" };
+                // to create new table
+                // delete database and current migrations folder
+                // dotnet ef migrations add InitialCreate
+                // dotnet ef database update
                 functions.CreateBagPack();
                 TextArt.title();
                 while (true)
@@ -37,40 +30,85 @@ namespace PokemonPocket
                     }
                     if (response == "2")
                     {
-                        functions.DisplayPoke();
+                        if (PokeDb.Count > 0)
+                        {
+                            functions.DisplayPoke();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Your pocket is empty");
+                        }
                     }
                     if (response == "3")
                     {
-                        functions.CheckEvolve();
+                        if (PokeDb.Count > 0)
+                        {
+                            functions.CheckEvolve();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Your pocket is empty");
+                        }
                     }
                     if (response == "4")
                     {
-                        functions.EvolvePokemon();
-                        continue;
+                        if (PokeDb.Count > 0)
+                        {
+                            functions.EvolvePokemon();
+                            continue;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Your pocket is empty");
+                        }
                     }
                     if (response == "5")
                     {
-                        if (PokeDb.Count > 0){
+                        if (PokeDb.Count > 0)
+                        {
                             functions.DeletePoke();
-                        } else{
+                        }
+                        else
+                        {
                             Console.WriteLine("You have no pokemon to battle with");
                         }
                     }
                     if (response == "6")
                     {
-                        functions.PokemonBattle();
+                        if (PokeDb.Count > 0)
+                        {
+                            functions.PokemonBattle();
+                            continue;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Your pocket is empty");
+                        }
                     }
-                    if (response == "7"){
+                    if (response == "7")
+                    {
                         functions.DisplayPokeItems();
                     }
-                    if (response == "8"){
+                    if (response == "8")
+                    {
                         functions.PokemonShop();
                     }
-                    if (response == "9"){
+                    if (response == "9")
+                    {
                         functions.PokemonBattleRules();
                     }
-                    if (response == "10"){
-                        functions.LevelUpPokemon();
+                    if (response == "10")
+                    {
+                        if (PokeDb.Count > 0)
+                        {
+                            functions.LevelUpPokemon();
+                            continue;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Your pocket is empty");
+                        }
+
                     }
                     // exit application
                     if (response == "Q")

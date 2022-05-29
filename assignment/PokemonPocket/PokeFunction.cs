@@ -45,7 +45,7 @@ namespace PokemonPocket
             string dash = String.Concat(Enumerable.Repeat("-", 29));
             Console.WriteLine($"{stars}\nWelcome to Pokemon Pocket App\n{stars}");
             Console.WriteLine("(1).  Add Pokemon To Pocket\n(2).  List Pokemon(s) in my pocket\n(3).  Check if i can evolve Pokemon\n(4).  Evolve Pokemon");
-            Console.WriteLine($"(5).  Delete Pokemon from list\n(6).  Pokemon Battle\n(7).  Display Your Items in BagPack\n(8).  PokeShop\n(9).  Pokemon Battle Rules");
+            Console.WriteLine($"(5).  Delete Pokemon from list\n(6).  Pokemon Battle\n(7).  Display Your Items in BagPack\n(8).  PokeShop\n(9).  Pokemon Battle Rules\n(10). Level Up Pokemon");
             Console.Write("Please only enter [1,2,3,4] or Q to quit : ");
         }
 
@@ -59,7 +59,7 @@ namespace PokemonPocket
         {
             Console.WriteLine("Welcome to the Pokemon Shop!");
             Console.WriteLine("Here are some items that are available for purchase");
-            Console.WriteLine("1) Heal Potion - Heal your pokemon back to full health at any point in the fight - 100 Coins");
+            Console.WriteLine("1) Heal Potion - Heal your pokemon back to full health at any point in the fight - 300 Coins");
             Console.WriteLine("2) Attack Booster - Give your pokemon a 20% attack boost in battle(Lasts only 3 rounds) - 100 Coins");
         }
 
@@ -103,45 +103,67 @@ namespace PokemonPocket
         {
             using (var db = new ContextPoke())
             {
+            while (true){
                 try
                 {
                     Console.Write("Enter Pokemon's Name: ");
                     string Poke_Name = Console.ReadLine().ToLower();
+                    if (Poke_Name == "pikachu" || Poke_Name == "charmander" || Poke_Name == "eevee")
+                    {
 
-                    Console.Write("Enter Pokemon's HP: ");
-                    int Poke_HP = Int32.Parse(Console.ReadLine());
+                        Console.Write("Enter Pokemon's HP: ");
+                        int Poke_HP = Int32.Parse(Console.ReadLine());
 
-                    Console.Write("Enter Pokemon's EXP: ");
-                    int Poke_EXP = Int32.Parse(Console.ReadLine());
+                        Console.Write("Enter Pokemon's EXP: ");
+                        int Poke_EXP = Int32.Parse(Console.ReadLine());
 
 
+                        if (Poke_HP >= 0 || Poke_EXP >= 0)
+                        {
+                            if (Poke_Name == "pikachu")
+                        {
+                            db.Add(new Pikachu(Poke_Name, Poke_HP, Poke_EXP, 10));
+                            Console.WriteLine($"{Poke_Name} has been added to your pocket!");
+                            db.SaveChanges();
+                            break;
+                        }
+
+                        else if (Poke_Name == "charmander")
+                        {
+                            db.Add(new Charmander(Poke_Name, Poke_HP, Poke_EXP, 10));
+                            Console.WriteLine($"{Poke_Name} has been added to your pocket!");
+                            db.SaveChanges();
+                            break;
+                            
+                        }
+                        else if (Poke_Name == "eevee")
+                        {
+                            db.Add(new Eevee(Poke_Name, Poke_HP, Poke_EXP, 10));
+                            Console.WriteLine($"{Poke_Name} has been added to your pocket!");
+                            db.SaveChanges();
+                            break;
+                           
+                        }
+                        }
+                        else
+                        {
+                            Console.WriteLine("You cannot input negative numbers as pokemon's attributes!");
+                            continue;
+                        }
+                    }
                     // adding pokemons and their evol into object
-                    if (Poke_Name == "pikachu")
-                    {
-                        db.Add(new Pikachu(Poke_Name, Poke_HP, Poke_EXP, 10));
-                        db.SaveChanges();
-                    }
-
-                    else if (Poke_Name == "charmander")
-                    {
-                        db.Add(new Charmander(Poke_Name, Poke_HP, Poke_EXP, 10));
-                        db.SaveChanges();
-                    }
-                    else if (Poke_Name == "eevee")
-                    {
-                        db.Add(new Eevee(Poke_Name, Poke_HP, Poke_EXP, 10));
-                        db.SaveChanges();
-                    }
                     else
                     {
                         Console.WriteLine("Invalid name entered");
+                        continue;
                     }
-                    Console.WriteLine($"{Poke_Name} has been added to your pocket!");
                 }
                 catch
                 {
                     Console.WriteLine("Invalid datatype entered");
+                    continue;
                 }
+            }
 
             }
         }
@@ -175,37 +197,54 @@ namespace PokemonPocket
             new PokemonMaster("eevee" , 3 , "Flareon"),
             new PokemonMaster("charmander" , 1 , "Charmeleon")
                 };
-
-                var PokeDb = db.pokemons.ToList();
-                DisplayPoke();
-                Console.Write("Enter Pokemon ID that you want to evolve (to check):");
-                int PokeID = Convert.ToInt32(Console.ReadLine()); // entered by user
-                string checking = PokeDb.Where(x => x.PokemonId == PokeID).First().name;
-
-                for (int i = 0; i < pokemonMasters.Count; i++)
+                bool checkStatus = true;
+                while (checkStatus == true)
                 {
-                    if (checking == pokemonMasters[i].Name)
+                    try
                     {
-                        if (PokeDb.Where(x => x.name == checking).Count() == pokemonMasters[i].NoToEvolve)
+                        var PokeDb = db.pokemons.ToList();
+                        DisplayPoke();
+                        Console.Write("Enter Pokemon ID that you want to evolve (to check):(99 to exit)");
+                        int PokeID = Convert.ToInt32(Console.ReadLine()); // entered by user
+                        if (PokeID == 99)
                         {
-                            Console.WriteLine($"Yes , your pokemon {pokemonMasters[i].Name} can be evolved to {pokemonMasters[i].EvolveTo}");
-                            Console.WriteLine($"You have currently {pokemonMasters[i].NoToEvolve} of {pokemonMasters[i].Name} pokemon");
-                            break;
+                            checkStatus = false;
                         }
                         else
                         {
-                            Console.WriteLine($"Yes , your pokemon {pokemonMasters[i].Name} can be evolved to {pokemonMasters[i].EvolveTo}");
-                            Console.WriteLine("Your selected pokemon does not have enough pokemon!");
-                            break;
+                            string checking = PokeDb.Where(x => x.PokemonId == PokeID).First().name;
+                            for (int i = 0; i < pokemonMasters.Count; i++)
+                            {
+                                if (checking == pokemonMasters[i].Name)
+                                {
+                                    if (PokeDb.Where(x => x.name == checking).Count() == pokemonMasters[i].NoToEvolve)
+                                    {
+                                        Console.WriteLine($"Yes , your pokemon {pokemonMasters[i].Name} can be evolved to {pokemonMasters[i].EvolveTo}");
+                                        Console.WriteLine($"You have currently {pokemonMasters[i].NoToEvolve} of {pokemonMasters[i].Name} pokemon");
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine($"Yes , your pokemon {pokemonMasters[i].Name} can be evolved to {pokemonMasters[i].EvolveTo}");
+                                        Console.WriteLine("Your selected pokemon does not have enough pokemon!");
+                                        break;
+                                    }
+                                }
+                                else if (PokeDb.Where(x => x.PokemonId == PokeID).First().EvolveStatus == false)
+                                {
+                                    Console.WriteLine("Your pokemon has been evolved fully");
+                                    break;
+                                }
+
+
+                            }
                         }
+
                     }
-                    else if (PokeDb.Where(x => x.PokemonId == PokeID).First().EvolveStatus == false)
+                    catch
                     {
-                        Console.WriteLine("Your pokemon has been evolved fully");
-                        break;
+                        Console.WriteLine("ID was not found in database");
                     }
-
-
                 }
             }
         }
@@ -214,85 +253,99 @@ namespace PokemonPocket
         {
             using (var db = new ContextPoke())
             {
-                var PokeDb = db.pokemons.ToList();
-                List<int> PokemonToDie = new List<int>() { };
-                DisplayPoke();
-                Console.Write("Select which pokemon you would like to evolve:\n");
-                int evolve = Int32.Parse(Console.ReadLine());
-                // run selected id thru db list
-                int ValidID = PokeDb.Where(x => x.PokemonId == evolve).First().PokemonId;
-                if (ValidID >= 0)
+                while (true)
                 {
-                    Pokemon selected = PokeDb.Where(x => x.PokemonId == evolve).First(); // store selected pokemon as object var
-                    if (PokeDb.Where(y => y.name == selected.name).Count() >= selected.NoToEvolve && selected.EvolveStatus == true)
+                    try
                     {
-                        foreach (Pokemon m in PokeDb.OrderBy(m => m.HP))
+                        var PokeDb = db.pokemons.ToList();
+                        List<int> PokemonToDie = new List<int>() { };
+                        DisplayPoke();
+                        Console.Write("Select which pokemon you would like to evolve:(99 to exit)\n");
+                        int evolve = Int32.Parse(Console.ReadLine());
+                        // run selected id thru db list
+                        if (evolve == 99)
                         {
-                            if (m.name == selected.name)
+                            break;
+                        }
+                        else if (PokeDb.Where(x => x.PokemonId == evolve).First().PokemonId == evolve)
+                        {
+                            Pokemon selected = PokeDb.Where(x => x.PokemonId == evolve).First(); // store selected pokemon as object var
+                            if (PokeDb.Where(y => y.name == selected.name).Count() >= selected.NoToEvolve && selected.EvolveStatus == true)
                             {
-                                Console.WriteLine("Available Pokemons");
-                                Console.WriteLine($"ID of Pokemon {m.PokemonId} , Name : {m.name} , HP : {m.HP} , EXP : {m.EXP}");
+                                foreach (Pokemon m in PokeDb.OrderBy(m => m.HP))
+                                {
+                                    if (m.name == selected.name)
+                                    {
+                                        Console.WriteLine("Available Pokemons");
+                                        Console.WriteLine($"ID of Pokemon {m.PokemonId} , Name : {m.name} , HP : {m.HP} , EXP : {m.EXP}");
+                                    }
+                                }
+                                for (int y = 0; y < selected.NoToEvolve - 1; y++)
+                                { // keep asking which pokemons they want to merge till notoevolve number is met
+                                    while (true)
+                                    {
+                                        try
+                                        {
+                                            Console.WriteLine("Enter ID of pokemon you want to merge with the selected Pokemon");
+                                            int merge = Int32.Parse(Console.ReadLine());
+                                            // store selected merge to object var
+                                            Pokemon lamb = PokeDb.Where(x => x.PokemonId == merge).First();
+
+                                            int LambID = PokeDb.Where(x => x.PokemonId == merge).First().PokemonId;
+
+                                            if (LambID == selected.PokemonId)
+                                            {
+                                                Console.WriteLine("You cannot merge the pokemon you want to evolve"); continue;
+                                            }
+
+                                            if (lamb.name != selected.name)
+                                            {
+                                                Console.WriteLine("Enter valid ID"); continue;
+                                            }
+
+                                            PokemonToDie.Add(LambID);
+                                            break;
+                                        }
+                                        catch
+                                        {
+                                            Console.WriteLine("Error has occured");
+                                            continue;
+                                        }
+
+                                    }
+                                }
+
+                                db.RemoveRange(PokeDb.Where(x => PokemonToDie.Contains(x.PokemonId))); //remove id of merge
+                                Pokemon Evolved = PokeDb.Where(x => x.PokemonId == evolve).First(); // create evolved pokemon object to change its attributes
+
+                                Evolved.name = Evolved.EvolveTo;
+                                Evolved.EvolveStatus = false;
+                                Evolved.HP *= 3;
+                                Evolved.EXP = 0;
+                                Evolved.attack *= 2;
+                                Evolved.EvolveTo = "Evolution completed";
+                                db.SaveChanges();
+                                Console.WriteLine($"Your Pokemon has been evolved to {Evolved.name}");
+                            }
+                            else
+                            {
+                                Console.ForegroundColor = ConsoleColor.Blue;
+                                Console.WriteLine("Your Pokemon cannot be evolved");
+                                Console.ResetColor();
                             }
                         }
-                        for (int y = 0; y < selected.NoToEvolve - 1; y++)
-                        { // keep asking which pokemons they want to merge till notoevolve number is met
-                            while (true)
-                            {
-                                try
-                                {
-                                    Console.WriteLine("Enter ID of pokemon you want to merge with the selected Pokemon");
-                                    int merge = Int32.Parse(Console.ReadLine());
-                                    // store selected merge to object var
-                                    Pokemon lamb = PokeDb.Where(x => x.PokemonId == merge).First();
-
-                                    int LambID = PokeDb.Where(x => x.PokemonId == merge).First().PokemonId;
-
-                                    if (LambID == selected.PokemonId)
-                                    {
-                                        Console.WriteLine("You cannot merge the pokemon you want to evolve"); continue;
-                                    }
-
-                                    if (lamb.name != selected.name)
-                                    {
-                                        Console.WriteLine("Enter valid ID"); continue;
-                                    }
-
-                                    PokemonToDie.Add(LambID);
-                                    break;
-                                }
-                                catch
-                                {
-                                    Console.WriteLine("Error has occured");
-                                    continue;
-                                }
-
-                            }
+                        else
+                        {
+                            Console.WriteLine("Enter valid ID");
                         }
-
-                        db.RemoveRange(PokeDb.Where(x => PokemonToDie.Contains(x.PokemonId))); //remove id of merge
-                        Pokemon Evolved = PokeDb.Where(x => x.PokemonId == evolve).First(); // create evolved pokemon object to change its attributes
-
-                        Evolved.name = Evolved.EvolveTo;
-                        Evolved.EvolveStatus = false;
-                        Evolved.HP *= 3;
-                        Evolved.EXP = 0;
-                        Evolved.attack *= 2;
-                        Evolved.EvolveTo = "Evolution completed";
-                        db.SaveChanges();
-                        Console.WriteLine($"Your Pokemon has been evolved to {Evolved.name}");
                     }
-                    else
+                    catch
                     {
-                        Console.ForegroundColor = ConsoleColor.Blue;
-                        Console.WriteLine("Your Pokemon cannot be evolved");
-                        Console.ResetColor();
+                        Console.Write("That ID was not found in our database");
                     }
-                }
-                else
-                {
-                    Console.WriteLine("Enter valid ID");
                 }
             }
+
         }
 
         public static void DeletePoke()
@@ -301,46 +354,56 @@ namespace PokemonPocket
             {
                 while (true)
                 {
-                    List<int> PokemonToDelete = new List<int>() { };
-                    string dash = String.Concat(Enumerable.Repeat("-", 29));
-                    Console.WriteLine("List of Pokemon");
-                    var PokeDb = db.pokemons.ToList();
-                    PokeDb.Sort(delegate (Pokemon x, Pokemon y)
+                    try
                     {
-                        return x.HP.CompareTo(y.HP);
-                    });
-                    Console.WriteLine(dash);
-                    for (int i = 0; i < PokeDb.Count; i++)
-                    {
-                        Console.WriteLine($"ID : {PokeDb[i].PokemonId}\nName : {PokeDb[i].name}\nHP : {PokeDb[i].HP}\nEXP : {PokeDb[i].EXP}\nSkill: {PokeDb[i].Skill}\n{dash}\n{dash}");
-                        continue;
-                    }
-                    Console.WriteLine("Select The ID of Pokemon you want to delete(Q to exit)");
-                    var delete = Int32.Parse(Console.ReadLine());
-                    int DeleteID = PokeDb.Where(x => x.PokemonId == delete).First().PokemonId;
-                    Pokemon DeletePokemon = PokeDb.Where(y => y.PokemonId == DeleteID).First();
-                    if (DeleteID == delete)
-                    {
-                        Console.WriteLine($"Pokemon selected : {DeletePokemon.name}");
-                        Console.WriteLine("Are you sure you want to delete this pokemon?(Y/N):");
-                        string DeleteDecison = Convert.ToString(Console.ReadLine().ToUpper());
-                        if (DeleteDecison == "Y")
+                        List<int> PokemonToDelete = new List<int>() { };
+                        string dash = String.Concat(Enumerable.Repeat("-", 29));
+                        Console.WriteLine("List of Pokemon");
+                        var PokeDb = db.pokemons.ToList();
+                        PokeDb.Sort(delegate (Pokemon x, Pokemon y)
                         {
-                            PokemonToDelete.Add(DeleteID);
-                            Console.WriteLine($"{DeletePokemon.name} was deleted");
-                            db.RemoveRange(PokeDb.Where(x => PokemonToDelete.Contains(x.PokemonId)));
-                            db.SaveChanges();
+                            return x.HP.CompareTo(y.HP);
+                        });
+                        Console.WriteLine(dash);
+                        for (int i = 0; i < PokeDb.Count; i++)
+                        {
+                            Console.WriteLine($"ID : {PokeDb[i].PokemonId}\nName : {PokeDb[i].name}\nHP : {PokeDb[i].HP}\nEXP : {PokeDb[i].EXP}\nSkill: {PokeDb[i].Skill}\n{dash}\n{dash}");
+                            continue;
+                        }
+                        Console.WriteLine("Select The ID of Pokemon you want to delete(Q to exit)");
+                        var delete = Int32.Parse(Console.ReadLine());
+                        int DeleteID = PokeDb.Where(x => x.PokemonId == delete).First().PokemonId;
+                        Pokemon DeletePokemon = PokeDb.Where(y => y.PokemonId == DeleteID).First();
+                        if (DeleteID == delete)
+                        {
+                            Console.WriteLine($"Pokemon selected : {DeletePokemon.name}");
+                            Console.WriteLine("Are you sure you want to delete this pokemon?(Y/N):");
+                            string DeleteDecison = Convert.ToString(Console.ReadLine().ToUpper());
+                            if (DeleteDecison == "Y")
+                            {
+                                PokemonToDelete.Add(DeleteID);
+                                Console.WriteLine($"{DeletePokemon.name} was deleted");
+                                db.RemoveRange(PokeDb.Where(x => PokemonToDelete.Contains(x.PokemonId)));
+                                db.SaveChanges();
+                                break;
+                            }
+                            else if (DeleteDecison == "N") break;
+                            else Console.WriteLine("Enter decision and try again"); continue;
+                        }
+                        else if (Convert.ToString(delete) == "Q")
+                        {
                             break;
                         }
-                        else if (DeleteDecison == "N") break;
-                        else Console.WriteLine("Enter valid ID and try again"); continue;
                     }
-                    else if (Convert.ToString(delete) == "Q")
+                    catch
                     {
-                        break;
+                        Console.WriteLine("That ID was not found in our database"); continue;
                     }
                 }
+
+
             }
+
         }
         public static void PokemonBattle()
         {
@@ -349,6 +412,7 @@ namespace PokemonPocket
                 var PokeDb = db.pokemons.ToList();
                 var bagpack = db.PokeItemz.ToList();
                 int savedLevel = 0;
+                bool battleStatus = true;
                 Random rnd = new Random(); // generate random hp / exp values
                 List<Computer> GeneratedPokemon = new List<Computer>() { };
                 List<string> PokemonNames = new List<string>(){
@@ -368,49 +432,62 @@ namespace PokemonPocket
                 int ComputerAttack = 0;
                 while (true)
                 {
-                    Console.WriteLine("Choose your level!");
-                    Console.WriteLine("1)Level 1: \n2)Level 2: \n3)Level 3: ");
-                    int level = Int32.Parse(Console.ReadLine());
-                    // levels
-                    if (level == 1)
+                    try
                     {
-                        savedLevel = 1;
-                        ComputerHP = rnd.Next(50, 200); ComputerAttack = rnd.Next(5, 20); break;
-                    }
+                        Console.WriteLine("Choose your level!");
+                        Console.WriteLine("1)Level 1: \n2)Level 2: \n3)Level 3: (Exit Battle with 10)");
+                        int level = Int32.Parse(Console.ReadLine());
+                        // levels
+                        if (level == 1)
+                        {
+                            savedLevel = 1;
+                            ComputerHP = rnd.Next(50, 200); ComputerAttack = rnd.Next(5, 20); break;
+                        }
 
-                    if (level == 2)
-                    {
-                        savedLevel = 2;
-                        ComputerHP = rnd.Next(200, 400); ComputerAttack = rnd.Next(20, 40); break;
+                        if (level == 2)
+                        {
+                            savedLevel = 2;
+                            ComputerHP = rnd.Next(200, 400); ComputerAttack = rnd.Next(20, 40); break;
+                        }
+                        if (level == 3)
+                        {
+                            savedLevel = 3;
+                            ComputerHP = rnd.Next(400, 600); ComputerAttack = rnd.Next(60, 80); break;
+                        }
+                        if (level == 10)
+                        {
+                            battleStatus = false;
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Enter valid level");
+                            continue;
+                        }
                     }
-                    if (level == 3)
+                    catch
                     {
-                        savedLevel = 3;
-                        ComputerHP = rnd.Next(400, 600); ComputerAttack = rnd.Next(60, 80); break;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Enter valid level");
+                        Console.WriteLine("Invalid level");
                         continue;
                     }
                 }
-                string GenerateName = PokemonNames[rnd.Next(1, PokemonNames.Count)];
-                GeneratedPokemon.Add(new Computer(GenerateName, ComputerHP, ComputerAttack, 0));
-                for (var i = 0; i < GeneratedPokemon.Count; i++)
-                {
-                    Console.WriteLine($"A wild {GeneratedPokemon[i].name} has appeared!");
-                    Console.WriteLine($"HP : {GeneratedPokemon[i].HP}");
-                    Console.WriteLine($"Attack : {GeneratedPokemon[i].attack}");
-                }
-                DisplayPoke();
-                bool battleStatus = true;
                 while (battleStatus == true)
                 {
+                    string GenerateName = PokemonNames[rnd.Next(1, PokemonNames.Count)];
+                    GeneratedPokemon.Add(new Computer(GenerateName, ComputerHP, ComputerAttack, 0));
+                    Console.WriteLine($"A wild {GenerateName} has appeared!");
+                    Console.WriteLine($"HP : {ComputerHP}");
+                    Console.WriteLine($"Attack : {ComputerAttack}");
+                    DisplayPoke();
                     try
                     {
                         Console.WriteLine("Select the ID of the pokemon you want to battle with : (99 to Exit)");
                         int battlePokemon = Int32.Parse(Console.ReadLine());
-                        if (PokeDb.Where(x => x.PokemonId == battlePokemon).First().PokemonId == battlePokemon)
+                        if (battlePokemon == 99)
+                        {
+                            battleStatus = false;
+                        }
+                        else if (PokeDb.Where(x => x.PokemonId == battlePokemon).First().PokemonId == battlePokemon)
                         {
                             Pokemon SelectedForBattle = PokeDb.Where(x => x.PokemonId == battlePokemon).First();
                             Console.WriteLine(FiggleFonts.Standard.Render($"{SelectedForBattle.name}     VS     {GeneratedPokemon[0].name}"));
@@ -459,13 +536,13 @@ namespace PokemonPocket
                                     // main attack function
                                     BattleMenu();
                                     Console.Write("Select a battle option [1,2,3,Q]");
-                                    List<char> BattleOptions = new List<char>() { '1', '2', '3', 'Q' };
-                                    var attackDecision = Convert.ToChar(Console.ReadLine().ToUpper());
-                                    if (attackDecision == '1')
+                                    List<string> BattleOptions = new List<string>() { "1", "2", "3", "Q" };
+                                    var attackDecision = Console.ReadLine().ToUpper();
+                                    if (Convert.ToString(attackDecision) == "1")
                                     {
                                         GeneratedPokemon[0].HP -= SelectedForBattle.attack;
                                     }
-                                    if (attackDecision == '2')
+                                    if (Convert.ToString(attackDecision) == "2")
                                     {
                                         if (bagpack[FindHeal()].PokeItemCount > 0)
                                         {
@@ -478,7 +555,7 @@ namespace PokemonPocket
                                             Console.WriteLine("You do not have heal potions");
                                         }
                                     }
-                                    if (attackDecision == '3')
+                                    if (Convert.ToString(attackDecision) == "3")
                                     {
                                         if (bagpack[FindAttack()].PokeItemCount > 0)
                                         {
@@ -496,7 +573,7 @@ namespace PokemonPocket
                                         }
 
                                     }
-                                    else if (attackDecision == 'Q')
+                                    else if (Convert.ToString(attackDecision) == "Q")
                                     {
                                         Console.WriteLine("Battle Stopped");
                                         break;
@@ -598,108 +675,118 @@ namespace PokemonPocket
                 var PokeDb = db.pokemons.ToList();
                 var bagpack = db.PokeItemz.ToList();
                 functions.PokeShopMenu();
-                List<int> purchaseChoices = new List<int>(){
-            1,
-            2
+                List<string> purchaseChoices = new List<string>(){
+            "1",
+            "2",
+            "Q",
+            "q"
         };
-                try
+                while (true)
                 {
-                    DisplayPokeItems();
-                    Console.Write("Please select your choice of purchase");
-                    int purchase = Int32.Parse(Console.ReadLine());
-                    if (purchaseChoices.Contains(purchase))
+                    try
                     {
-                        if (purchase == 1)
+                        DisplayPokeItems();
+                        Console.Write("Please select your choice of purchase(Q to exit) : ");
+                        string purchase = Convert.ToString(Console.ReadLine());
+                        if (purchaseChoices.Contains(purchase))
                         {
-                            Console.Write("You have selected the heal potion!");
-                            Console.WriteLine("Price : 300 Coins");
-                            Console.WriteLine("Are you sure you want to purchase a heal potion?");
-                            char buy = Convert.ToChar(Console.ReadLine().ToUpper());
-                            foreach (PokeItems i in bagpack)
+                            if (purchase == "1")
                             {
-                                if (buy == 'Y')
+                                Console.Write("You have selected the heal potion!");
+                                Console.WriteLine("Price : 300 Coins");
+                                Console.WriteLine("Are you sure you want to purchase a heal potion?");
+                                char buy = Convert.ToChar(Console.ReadLine().ToUpper());
+                                foreach (PokeItems i in bagpack)
                                 {
-                                    if (i.PokeItemName == "Coins")
+                                    if (buy == 'Y')
                                     {
-                                        if (i.PokeItemCount >= 300)
+                                        if (i.PokeItemName == "Coins")
                                         {
-                                            foreach (PokeItems g in bagpack)
+                                            if (i.PokeItemCount >= 300)
                                             {
-                                                if (g.PokeItemName == "Heal Potion")
+                                                foreach (PokeItems g in bagpack)
                                                 {
-                                                    g.PokeItemCount += 1;
-                                                    db.SaveChanges();
+                                                    if (g.PokeItemName == "Heal Potion")
+                                                    {
+                                                        g.PokeItemCount += 1;
+                                                        db.SaveChanges();
+                                                    }
+
                                                 }
+                                                i.PokeItemCount -= 300;
+                                                db.SaveChanges();
+                                                Console.WriteLine("You have purchased a heal potion!");
 
                                             }
-                                            i.PokeItemCount -= 300;
-                                            db.SaveChanges();
-                                            Console.WriteLine("You have purchased a heal potion!");
-
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine("You do not have enough coins!");
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Please enter a valid option");
-                                }
-                            }
-                        }
-                        if (purchase == 2)
-                        {
-                            Console.WriteLine("You have selected an attack booster");
-                            Console.WriteLine("Price : 100 Coins");
-                            Console.WriteLine("Are you sure you want to purchase an Attack Booster?");
-                            char buy = Convert.ToChar(Console.ReadLine().ToUpper());
-                            foreach (PokeItems i in bagpack)
-                            {
-                                if (buy == 'Y')
-                                {
-                                    if (i.PokeItemName == "Coins")
-                                    {
-                                        if (i.PokeItemCount >= 100)
-                                        {
-                                            foreach (PokeItems g in bagpack)
+                                            else
                                             {
-                                                if (g.PokeItemName == "AttackBooster")
-                                                {
-                                                    g.PokeItemCount += 1;
-                                                    db.SaveChanges();
-                                                }
-
+                                                Console.WriteLine("You do not have enough coins!");
                                             }
-                                            i.PokeItemCount -= 100;
-                                            db.SaveChanges();
-                                            Console.WriteLine("You have purchased an AttackBooster!");
-                                            break;
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine("You do not have enough coins!");
-                                            break;
                                         }
                                     }
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Please enter a valid option");
-                                    continue;
+                                    else
+                                    {
+                                        Console.WriteLine("Please enter a valid option");
+                                        break;
+                                    }
                                 }
                             }
+                            if (purchase == "2")
+                            {
+                                Console.WriteLine("You have selected an attack booster");
+                                Console.WriteLine("Price : 100 Coins");
+                                Console.WriteLine("Are you sure you want to purchase an Attack Booster?");
+                                char buy = Convert.ToChar(Console.ReadLine().ToUpper());
+                                foreach (PokeItems i in bagpack)
+                                {
+                                    if (buy == 'Y')
+                                    {
+                                        if (i.PokeItemName == "Coins")
+                                        {
+                                            if (i.PokeItemCount >= 100)
+                                            {
+                                                foreach (PokeItems g in bagpack)
+                                                {
+                                                    if (g.PokeItemName == "AttackBooster")
+                                                    {
+                                                        g.PokeItemCount += 1;
+                                                        db.SaveChanges();
+                                                    }
+
+                                                }
+                                                i.PokeItemCount -= 100;
+                                                db.SaveChanges();
+                                                Console.WriteLine("You have purchased an AttackBooster!");
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine("You do not have enough coins!");
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Please enter a valid option");
+                                        break;
+                                    }
+                                }
+                            }
+                            if (purchase.ToUpper() == "Q")
+                            {
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Please enter a valid choice");
                         }
                     }
-                    else
+                    catch
                     {
-                        Console.WriteLine("Please enter a valid choice");
+                        Console.WriteLine("Incorrect Format Entered");
                     }
-                }
-                catch
-                {
-                    Console.WriteLine("Incorrect Format Entered");
                 }
 
             }
@@ -715,9 +802,9 @@ namespace PokemonPocket
                 EXPLevels.Add(3, 600);
                 EXPLevels.Add(4, 800);
                 EXPLevels.Add(5, 1000);
-                try
+                while (true)
                 {
-                    while (true)
+                    try
                     {
                         var PokeDb = db.pokemons.ToList();
                         DisplayPoke();
@@ -729,7 +816,7 @@ namespace PokemonPocket
                         {
                             break;
                         }
-                        else if (PokeDb.Where(x => x.PokemonId == Int32.Parse(levelUp)).First().PokemonId == Int32.Parse(levelUp))
+                        if (PokeDb.Where(x => x.PokemonId == Int32.Parse(levelUp)).First().PokemonId == Int32.Parse(levelUp))
                         {
                             Pokemon SelectedLevel = PokeDb.Where(x => x.PokemonId == Int32.Parse(levelUp)).First();
                             if (SelectedLevel.EvolveStatus == false)
@@ -745,8 +832,8 @@ namespace PokemonPocket
                                         {
                                             Console.WriteLine("Your pokemon has enough EXP!");
                                             Console.WriteLine("Are you sure you want to level this pokemon up?(Y/N)");
-                                            string LevelDecison = Convert.ToString(Console.ReadLine().ToUpper());
-                                            if (LevelDecison == "Y")
+                                            var LevelDecison = Console.ReadLine();
+                                            if (Convert.ToString(LevelDecison).ToUpper() == "Y")
                                             {
                                                 SelectedLevel.PokeLevel += 1;
                                                 SelectedLevel.HP += EXPLevels[i + 1] / 2;
@@ -755,7 +842,7 @@ namespace PokemonPocket
                                                 db.SaveChanges();
                                                 break;
                                             }
-                                            else if (LevelDecison == "N") break;
+                                            else if (Convert.ToString(LevelDecison).ToUpper() == "N") break;
                                             else Console.WriteLine("Please enter valid choice"); continue;
                                         }
                                         else
@@ -764,7 +851,7 @@ namespace PokemonPocket
                                             break;
                                         }
                                     }
-                                    else
+                                    else if (SelectedLevel.PokeLevel == 5)
                                     {
                                         Console.WriteLine("Your pokemon has been fully levelled up!");
                                     }
@@ -775,15 +862,11 @@ namespace PokemonPocket
                                 Console.WriteLine("Pokemon must be fully evolved before they can be levelled up!");
                             }
                         }
-                        else
-                        {
-                            Console.WriteLine("Please enter a valid pokemon ID");
-                        }
                     }
-                }
-                catch
-                {
-                    Console.WriteLine("Invalid Format entered");
+                    catch
+                    {
+                        Console.WriteLine("Enter valid pokemon ID");
+                    }
                 }
 
             }
